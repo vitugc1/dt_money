@@ -3,7 +3,10 @@ import React, { useState } from 'react';
 import { Dashboard } from './components/Dashboard';
 import { Header } from './components/Header';
 import { NewTransactionModal } from './components/NewTransactionModal';
+
+import { TransactionsProvider } from './context/TransactionsContext';
 import { GlobalStyle } from './styles/global';
+
 
 
 export const App: React.FC = () => {
@@ -18,7 +21,7 @@ export const App: React.FC = () => {
     }
 
     return (
-        <>
+        <TransactionsProvider>
             <Header
                 onOpenNewTransactionModal={handleOpenNewTransactionModal}
             />
@@ -31,7 +34,7 @@ export const App: React.FC = () => {
             />
 
             <GlobalStyle />
-        </>
+        </TransactionsProvider>
     )
 };
 

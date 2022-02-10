@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTransactions } from '../../hooks/useTransaction';
 
 import incomeImg from '../../assets/Entradas.svg';
 import outcomeImg from '../../assets/Saídas.svg';
@@ -7,6 +8,25 @@ import totalImg from '../../assets/Total.svg';
 import { Container } from './styles';
 
 export const Summary: React.FC = () => {
+    const { transactions } = useTransactions();
+
+    const sumary = transactions.reduce((acc, transaction) => {
+        if(transaction.type === 'deposit') {
+            acc.deposit += transaction.amount;
+            acc.total += transaction.amount;
+        }else {
+            acc.withdraw += transaction.amount;
+            acc.total -= transaction.amount;
+        }
+
+        return acc;
+
+    }, {
+        deposit: 0,
+        withdraw: 0,
+        total: 0,
+    })
+
     return (
         <Container>
 
@@ -15,7 +35,14 @@ export const Summary: React.FC = () => {
                     <p>Entradas</p>
                     <img src={incomeImg} alt="Entradas" />
                 </header>
-                <strong>R$1000, 00</strong>
+                <strong>
+                    {new Intl.NumberFormat('pt-BR', 
+                        { 
+                            style: 'currency',
+                            currency: 'BRL' 
+                        }).format(sumary.deposit)
+                    }
+                </strong>
             </div>
 
             <div>
@@ -23,7 +50,14 @@ export const Summary: React.FC = () => {
                     <p>Saídas</p>
                     <img src={outcomeImg} alt="Saídas" />
                 </header>
-                <strong>- R$500, 00</strong>
+                <strong>-
+                    {new Intl.NumberFormat('pt-BR', 
+                        { 
+                            style: 'currency',
+                            currency: 'BRL' 
+                        }).format(sumary.withdraw)
+                    }
+                </strong>
             </div>
 
             <div className="highlight-background">
@@ -31,7 +65,14 @@ export const Summary: React.FC = () => {
                     <p>Total</p>
                     <img src={totalImg} alt="Total" />
                 </header>
-                <strong>R$500, 00</strong>
+                <strong>
+                    {new Intl.NumberFormat('pt-BR', 
+                        { 
+                            style: 'currency',
+                            currency: 'BRL' 
+                        }).format(sumary.total)
+                    }
+                </strong>
             </div>
         </Container>
     )
